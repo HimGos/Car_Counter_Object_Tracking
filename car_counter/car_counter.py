@@ -36,8 +36,10 @@ while True:
     success, img = cap.read()
     # Overlapping mask over image
     img_region = cv2.bitwise_and(img, mask)
-
     results = model(img_region, stream=True)    # Stream uses generators
+
+    img_graphics = cv2.imread("car_counter/graphics.png", cv2.IMREAD_UNCHANGED)
+    img = cvzone.overlayPNG(imgBack=img, imgFront=img_graphics, pos=(0, 0))
 
     detections = np.empty((0, 5))             # x1,y1,x2,y2,id_number    
 
@@ -111,12 +113,12 @@ while True:
 
 
     # Showing count
-    cvzone.putTextRect(img=img,
-                        text=f'Count: {len(total_counts)}',
-                        pos=(50, 50),
-                        colorT=(0, 0, 0),
-                        colorR=(0, 255, 255),
-                        colorB=(255, 255, 0))
+    # cvzone.putTextRect(img=img, text=f'Count: {len(total_counts)}', pos=(50, 50),
+    #                     colorT=(0, 0, 0), colorR=(0, 255, 255), colorB=(255, 255, 0))
+
+    # Showing fancy count
+    cv2.putText(img=img, text=str(len(total_counts)), org=(255, 100), 
+                fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=5, color=(50, 50, 255), thickness=8)
 
     cv2.imshow("Image", img)
     # cv2.imshow("ImageRegion", img_region)
